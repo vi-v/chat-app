@@ -22,10 +22,6 @@
 				position: relative;
 			}
 
-			input {
-				color: red;
-			}
-
 		</style>
 
 		<meta charset="utf-8">
@@ -40,7 +36,7 @@
 		<div class = "container-fluid scene">
 			<div class = "row">
 				<div class= "col-xs-12">
-					<h1 class="text-center"><strong>Welcome to the chatroom!</strong>
+					<h1 class="text-center" id="banner"><strong>Welcome to the chatroom!</strong>
 						<span>Have a spanking good time!</span>
 					</h1>
 				</div>
@@ -65,13 +61,13 @@
 									<div class = "md-form">
 										<i class="fa fa-envelope prefix"></i>
 										<label for="message" id="message-label">Send a message</label>
-										<input type = "text" id="message" class = "form-control danger" style="color:red"></input>
+										<input type = "text" id="message" class = "form-control danger"></input>
 									</div>
 								</div>
 
 								<div class = "col-md-1">
 									<div class = "md-form">
-										<input type="submit" class="btn btn-sm btn-primary"></input>
+										<input type="submit" class="btn btn-sm btn-outline-success waves-effect" id="submit-button"></input>
 									</div>
 								</div>
 							</div>
@@ -89,8 +85,8 @@
 	  <script type="text/javascript" src="js/tether.min.js"></script>
 	  <script type="text/javascript" src="js/mdb.min.js"></script>
 		<script src="//cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-
 		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="js/theme.js"></script>
 		<script>
 		jQuery(function($) {
 
@@ -117,7 +113,7 @@
 					if(commands[0]=='help') {
 						if(commands.length==1) {
 							$chat.append("<br><strong>/clear</strong> Clears the chat box.<br><strong>/join \< chatroom name \> </strong> Joins chatroom with specified name. If the room does not exist, one will be created.<br><strong>/leave</strong> Leaves the current chatroom.<br>"+
-						"<strong>/color \< color \></strong> Changes message color to specified color or hex code<br><br>");
+						"<strong>/color \< color \></strong> Changes message color to specified color or hex code<br><strong>/theme < type ></strong> Selects theme: <em>dark</em> or <em>light</em><br><br>");
 						}
 					}
 					else if(commands[0]=='color') {
@@ -143,6 +139,22 @@
 					else if(commands[0]=='leave') {
 						socket.emit('room', {currentRoom: room, newRoom: 'Global Chat'});
 						room = 'Global Chat';
+					}
+					else if(commands[0]=='theme') {
+						if(commands.length==1) {
+							$chat.append("<strong>Invalid command. Please type \/help for a list of available commands.</strong><br>");
+							return;
+						}
+						if(commands[1]=='dark') {
+							dark();
+						}
+						else if(commands[1]=='light') {
+							light();
+						}
+						else {
+							$chat.append("<strong>Invalid command. Please type \/help for a list of available commands.</strong><br>");
+							return;
+						}
 					}
 					else {
 						$chat.append("<strong>Invalid command. Please type \/help for a list of available commands.</strong><br>");
