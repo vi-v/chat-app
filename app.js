@@ -1,7 +1,8 @@
 var express = require('express'),
 	app = express(),
 	server = require('http').createServer(app),
-	io = require('socket.io').listen(server);
+	io = require('socket.io').listen(server),
+	currentRoom;
 
 app.use(express.static(__dirname + '/public'));
 
@@ -14,7 +15,7 @@ app.get('/', function(req, res) {
 io.sockets.on('connection', function(socket) {
 	socket.on('room', function(data) {
 		var newRoom = data.newRoom;
-		var currentRoom = data.currentRoom;
+		currentRoom = data.currentRoom;
 		if(currentRoom != undefined) {
 			socket.leave(currentRoom);
 			io.in(currentRoom).emit('new message', {currentRoom, message: '<strong>A user has disconnected from the room.</strong>'});
@@ -35,6 +36,7 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('disconnect', function() {
+		if(currentRoom === undefined) currentRoom = "Global Chat";
 		io.in(currentRoom).emit('new message', {currentRoom, message: '<strong>A user has disconnected from the room.</strong>'});
 	});
 });
