@@ -37,7 +37,7 @@
 			<div class = "row">
 				<div class= "col-xs-12">
 					<h1 class="text-center" id="banner"><strong>Welcome to the chatroom!</strong>
-						<span>Have a spanking good time!</span>
+						<!-- <span>Have a spanking good time!</span> -->
 					</h1>
 				</div>
 			</div>
@@ -98,6 +98,7 @@
 			var textColor = 'black';
 			var room = 'Global Chat';
 
+			dark();
 			socket.emit('room', {currentRoom: undefined, newRoom : room});
 			document.getElementById('message-label').innerHTML = 'Send a message in '+room;
 			$('#particles-js').height($(window).height());
